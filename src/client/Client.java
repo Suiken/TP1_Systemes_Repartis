@@ -11,37 +11,24 @@ import java.net.UnknownHostException;
 public class Client {
 
     public static void main(String[] zero) {
-
         Socket socket;
         BufferedReader in;
-        PrintWriter out;
 
         try {
-
-            socket = new Socket(InetAddress.getLocalHost(),2009);
-            System.out.println("Connection");
+            socket = new Socket(InetAddress.getLocalHost(), 1111);
+            System.out.println("Connected !");
 
             in = new BufferedReader (new InputStreamReader(socket.getInputStream()));
-            String message_distant = in.readLine();
-            System.out.println(message_distant);
+
+            String message_distant;
+            if ((message_distant = in.readLine()) != null)
+                System.out.println(message_distant);
 
             socket.close();
-
         }catch (UnknownHostException e) {
-
-
-
             e.printStackTrace();
-
         }catch (IOException e) {
-
-
-
             e.printStackTrace();
-
         }
-
     }
-
-
 }
