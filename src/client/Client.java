@@ -5,6 +5,8 @@ import common.ByteStream;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Client {
     private static Socket socket;
@@ -58,9 +60,9 @@ public class Client {
 
     public static void sendMessage(){
         try {
-            ByteStream.toStream(socket.getOutputStream(), new File(getLine("Saisir le chemin d'un fichier :")));
-
             String message = getLine("Saisir un message :");
+
+            System.out.println(translateInput(message));
 
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             out.println(message);
@@ -72,10 +74,28 @@ public class Client {
         }
     }
 
+    public static String translateInput(String input) {
+        Pattern pattern = Pattern.compile(MathRegex.ADDITION.toString());
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            input = input.replaceAll("\\s+","");
+            System.out.println(input);
+
+            String[] parameters = input.split("\\+");
+            int a = Integer.parseInt(parameters[0]);
+            int b = Integer.parseInt(parameters[1]);
+
+            return "Addition de : " + a + " + " + b;
+        }
+        return "Opération incorrecte.";
+    }
+
     public static String getLine(String message){
         Scanner scanner = new Scanner(System.in);
         System.out.println(message);
         while(!scanner.hasNextLine()){}
+
         return scanner.nextLine();
     }
 }

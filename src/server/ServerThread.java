@@ -33,13 +33,13 @@ class ServerThread implements Runnable {
 
                 // Reception message
                 InputStream socketInputStream = socket.getInputStream();
-                String file = ByteStream.toString(socketInputStream);
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(socketInputStream));
                 String message = in.readLine();
 
                 System.out.println("Message reçu de " + clientMap.get(socket) + " : " +message);
-                System.out.println("Fichier recu : " + file);
+                //System.out.println("Fichier recu : " + file);
+                
                 ++id;
 
                 socket.close();
