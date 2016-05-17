@@ -1,5 +1,8 @@
 package client;
 
+import common.ByteStream;
+
+import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.AbstractMap;
@@ -53,6 +56,7 @@ public class ClientEmission implements Runnable {
 
     public void sendMessage(){
         try {
+            ByteStream.toStream(outputStream, new File("/home/suiken/Bureau/Calc.class"));
             String message = getLine("Saisir un message :");
 
             AbstractMap.SimpleEntry<String, String> entry = translateIntoAddition(message);
@@ -84,7 +88,7 @@ public class ClientEmission implements Runnable {
             int a = Integer.parseInt(parameters[0]);
             int b = Integer.parseInt(parameters[1]);
 
-            String classPath = Calc.class.getResource("Calc.class").toString();
+            String classPath = "Calc&add&" + a + "," + b;
             String message = "Calc&add&" + a + "," + b;
 
             return new AbstractMap.SimpleEntry<>(classPath, message);
