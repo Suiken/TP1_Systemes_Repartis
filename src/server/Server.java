@@ -1,24 +1,19 @@
 package server;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.*;
 
 public class Server {
+    private static ServerSocket socket;
+    private static int PORT = 1111;
 
     public static void main(String[] zero){
-
-        ServerSocket socket;
-        PrintWriter out;
-
         try {
-            socket = new ServerSocket(2009);
+            socket = new ServerSocket(PORT);
             Thread t = new Thread(new ServerThread(socket));
             t.start();
-            System.out.println("Mes employeurs sont prêts !");
-
+            System.out.println("Serveur démarré !");
         } catch (IOException e) {
-
             e.printStackTrace();
         }
     }

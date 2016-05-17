@@ -9,50 +9,36 @@ import java.net.Socket;
 
 class ServerThread implements Runnable {
 
-    private ServerSocket socketserver;
-
+    private ServerSocket socketServer;
     private Socket socket;
+    private int nbClient = 1;
 
-    private int nbrclient = 1;
-
-    public ServerThread(ServerSocket s){
-
-        socketserver = s;
-
+    public ServerThread(ServerSocket serverSocket){
+        socketServer = serverSocket;
     }
 
     public void run() {
-
         try {
-
             while(true){
+                socket = socketServer.accept();
+                System.out.println("Le client numéro " + nbClient + " est connecté !");
+                nbClient++;
 
-                socket = socketserver.accept(); // Un client se connecte on l'accepte
-
-                System.out.println("Le client numéro "+nbrclient+ " est connecté !");
-
-                nbrclient++;
-
-                //envoie message
+                // Envoie message
                 PrintWriter out = new PrintWriter(socket.getOutputStream());
-                out.println("Votre id est " + nbrclient);
+                out.println("Votre ID est " + nbClient);
                 out.flush();
 
-                //Reception message
+                // Reception message
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String message = in.readLine();
-                System.out.println("Message recu " + message);
+                System.out.println("Message reçu : " + message);
 
                 socket.close();
-
             }
-
-        } catch (IOException e) {
-
+        } catch (Exception e) {
             e.printStackTrace();
-
         }
-
     }
 }
 
