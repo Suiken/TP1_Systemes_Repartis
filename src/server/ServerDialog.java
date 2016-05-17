@@ -31,8 +31,7 @@ public class ServerDialog implements Runnable {
 
             receptionThread = new Thread(new ServerEmission(out));
             receptionThread.start();
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Déconnexion de " + name + ".");
         }
     }

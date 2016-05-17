@@ -30,11 +30,11 @@ public class ClientEmission implements Runnable {
 
     public void display(){
         String help = "[DISPLAY]\n" +
-                "1 - Envoyer un message\n" +
+                "1 - Demander une opération\n" +
                 "h - Liste des commandes\n" +
                 "q - Quitter\n";
 
-        System.out.println(help);
+        System.out.println("\n" + help);
 
         String input = "";
         while (input != "q" || !scanner.hasNextLine()){
@@ -42,7 +42,7 @@ public class ClientEmission implements Runnable {
 
             switch (input){
                 case "1" :
-                    sendMessage();
+                    sendOperation();
                     System.out.println(help);
                     break;
                 case "h" :
@@ -50,50 +50,77 @@ public class ClientEmission implements Runnable {
                     break;
                 case "q" :
                     return;
+                default :
+                    sendOperation();
+                    break;
             }
         }
     }
 
-    public void sendMessage(){
+    public void sendOperation(){
         try {
-            ByteStream.toStream(outputStream, new File("/home/suiken/Bureau/Calc.class"));
-            String message = getLine("Saisir un message :");
+            String message = getLine("Saisir une opération :");
 
-            AbstractMap.SimpleEntry<String, String> entry = translateIntoAddition(message);
+            AbstractMap.SimpleEntry<String, String> entry = translate(message);
             if (entry != null){
-                out.println(entry.getKey());
-                out.flush();
+                ByteStream.toStream(outputStream, new File(entry.getKey()));
 
                 out.println(entry.getValue());
                 out.flush();
+                System.out.println("(envoyé)\n");
             }
             else {
-                out.println(message);
-                out.flush();
+                //out.println(message);
+                //out.flush();
+                System.out.println("'" + message + "' n'est pas une opération.\n");
             }
-            System.out.println("(envoyé)\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public AbstractMap.SimpleEntry<String, String> translateIntoAddition(String input) {
-        Pattern pattern = Pattern.compile(MathRegex.ADDITION.toString());
+    public AbstractMap.SimpleEntry<String, String> translate(String input) {
+        Pattern pattern = Pattern.compile(MathRegex.OPERATION.toString());
         Matcher matcher = pattern.matcher(input);
+        AbstractMap.SimpleEntry<String, String> entry;
 
-        if (matcher.find()) {
-            input = input.replaceAll("\\s+","");
+        if (!matcher.find() || (entry = translateIntoOperation(input)) == null)
+            return null;
 
-            String[] parameters = input.split("\\+");
-            int a = Integer.parseInt(parameters[0]);
-            int b = Integer.parseInt(parameters[1]);
+        return entry;
+    }
 
-            String classPath = "Calc&add&" + a + "," + b;
-            String message = "Calc&add&" + a + "," + b;
+    public AbstractMap.SimpleEntry<String, String> translateIntoOperation(String input){
+        MathRegex operation = getOperation(input);
+        if (operation.equals(MathRegex.OPERATION))
+            return null;
 
-            return new AbstractMap.SimpleEntry<>(classPath, message);
+        AbstractMap.SimpleEntry<Integer, Integer> values = getParameters(input, operation);
+
+        String classPath = Calc.class.getResource("Calc.class").getPath();
+        String message = "Calc&" + operation.getMethodName() + "&" + values.getKey() + "," + values.getValue();
+
+        return new AbstractMap.SimpleEntry<>(classPath, message);
+    }
+
+    public MathRegex getOperation(String input){
+        Matcher matcher;
+        for (MathRegex op : MathRegex.values()){
+            matcher = Pattern.compile(op.toString()).matcher(input);
+            if (matcher.find() && !op.equals(MathRegex.OPERATION)) {
+                return op;
+            }
         }
-        return null;
+        return MathRegex.OPERATION;
+    }
+
+    public AbstractMap.SimpleEntry<Integer, Integer> getParameters(String input, MathRegex operation){
+        input = input.replaceAll("\\s+","");
+        String[] parameters = input.split(operation.getOperator());
+        int a = Integer.parseInt(parameters[0]);
+        int b = Integer.parseInt(parameters[1]);
+
+        return new AbstractMap.SimpleEntry<>(a, b);
     }
 
     public String getLine(String message){

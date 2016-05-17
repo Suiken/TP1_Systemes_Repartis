@@ -14,8 +14,8 @@ import java.net.URLClassLoader;
  */
 public class ServerReception implements Runnable {
     private Socket socket;
-    private String message;
     private String name;
+    private String message;
     private PrintWriter out;
     private BufferedReader in;
 
@@ -33,61 +33,47 @@ public class ServerReception implements Runnable {
     public void run() {
         while(true){
             try {
-                String result = translateMessage(socket);
-                System.out.println("Réponse à envoyer : " + result);
-                sendMessage("Réponse : " + result, socket);
+//                while ((message = in.readLine()) != null)
+//                    System.out.println(name + " : " + message);
+                String result = translateMessage();
+
+                out.println(result);
+                out.flush();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    void sendMessage(String message, Socket socket) throws Exception{
-        out = new PrintWriter(socket.getOutputStream());
-        out.println(message);
-        out.flush();
-    }
+    String translateMessage() throws Exception{
+        ByteStream.toFile(socket.getInputStream(), new File("tmp.class"));
 
-    File receiveFile(Socket socket) throws Exception{
-        File tmpFile = new File("Temp.class");
-        ByteStream.toFile(socket.getInputStream(), tmpFile);
-        return tmpFile;
-    }
+        message = in.readLine();
+        String arguments[] = message.split("&");
+        Class<?> classFile = findClass(arguments[0]);
 
-    String translateMessage(Socket socket) throws Exception{
-        File tmpFile = receiveFile(socket);
-        String message = in.readLine();
-        String messages[] = message.split("&");
-        renameFile(tmpFile, messages[0]);
-        Class<?> classFile = findClass(messages[0]);
-        return executeMethod(classFile, messages[1], messages[2].split(","));
-    }
+        String result = executeMethod(classFile, arguments[1], arguments[2].split(","));
 
-    File renameFile(File file, String newName){
-        File resultFile = new File(newName + ".class");
-        file.renameTo(resultFile);
-        file.delete();
-        return resultFile;
+        return result;
     }
 
     Class<?> findClass(String className) throws Exception{
         File root = new File(".");
         URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { root.toURI().toURL() });
-        Class<?> classOfFile = Class.forName(className, true, classLoader);
+        Class<?> classOfFile = Class.forName("client." + className, true, classLoader);
+
         return classOfFile;
     }
 
     String executeMethod(Class<?> classOfFile, String methodName, String[] parameters) throws Exception{
         Constructor<?> constructorOfFile = classOfFile.getConstructor();
-        Object object = constructorOfFile.newInstance(new Object[] { });
+        Object object = constructorOfFile.newInstance();
 
         Method methods[] = classOfFile.getMethods();
-        Object result = new Object();
-        for(Method m : methods){
-            if(m.getName().equals(methodName)){
-                result = m.invoke(object, parameters);
-            }
+        for(Method method : methods){
+            if(method.getName().equals(methodName))
+                return method.invoke(object, parameters).toString();
         }
-        return result.toString();
+        return "Méthode non trouvée : " + methodName;
     }
 }
