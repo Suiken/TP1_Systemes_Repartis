@@ -26,7 +26,7 @@ public class ServerDialog implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
 
-            emissionThread = new Thread(new ServerReception(in, name));
+            emissionThread = new Thread(new ServerReception(socket, name));
             emissionThread.start();
 
             receptionThread = new Thread(new ServerEmission(out));

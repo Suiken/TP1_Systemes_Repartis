@@ -5,7 +5,8 @@ package client;
  */
 public enum MathRegex {
     ADDITION("^[0-9]+ *\\+ *[0-9]+"),
-    SUBSTRACTION("");
+    SUBSTRACTION("^[0-9]+ *\\- *[0-9]+"),
+    MULTIPLICATION("^[0-9]+ *\\* *[0-9]+");
 
     private String regex;
 
