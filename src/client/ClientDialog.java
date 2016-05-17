@@ -1,9 +1,6 @@
 package client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -12,8 +9,8 @@ import java.net.Socket;
 public class ClientDialog implements Runnable {
 
     private Socket socket;
-    private PrintWriter out = null;
-    private BufferedReader in = null;
+    private OutputStream outputStream;
+    private BufferedReader in;
     private Thread emissionThread, receptionThread;
 
     public ClientDialog(Socket socket){
@@ -22,13 +19,13 @@ public class ClientDialog implements Runnable {
 
     public void run() {
         try {
-            out = new PrintWriter(socket.getOutputStream());
+            outputStream = socket.getOutputStream();
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             receptionThread = new Thread(new ClientReception(in));
             receptionThread.start();
 
-            emissionThread = new Thread(new ClientEmission(out));
+            emissionThread = new Thread(new ClientEmission(outputStream));
             emissionThread.start();
         } catch (IOException e) {
             System.err.println("Le serveur distant s'est déconnecté !");
