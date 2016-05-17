@@ -1,5 +1,7 @@
 package client;
 
+import common.ByteStream;
+
 import java.io.*;
 import java.net.*;
 import java.util.AbstractMap;
@@ -10,11 +12,12 @@ import java.util.regex.Pattern;
 public class Client {
     private static Socket socket;
     private static String ADDRESS = "localhost";
-    private static int PORT = 2000;
+    private static int PORT = 2009;
 
     public static void main(String[] zero){
 
         try {
+
             socket = new Socket(ADDRESS, PORT);
 
             // Reception message
@@ -59,6 +62,8 @@ public class Client {
 
     public static void sendMessage(){
         try {
+            ByteStream.toStream(socket.getOutputStream(), new File("/home/suiken/Bureau/Calc.class"));
+
             String message = getLine("Saisir un message :");
             PrintWriter out = new PrintWriter(socket.getOutputStream());
 
@@ -89,7 +94,8 @@ public class Client {
             int a = Integer.parseInt(parameters[0]);
             int b = Integer.parseInt(parameters[1]);
 
-            String classPath = Calc.class.getResource("Calc.class").toString();
+//            String classPath = Calc.class.getResource("Calc.class").toString();
+            String classPath = "Calc&add&" + a + "," + b;
             String message = "Calc&add&" + a + "," + b;
 
             return new AbstractMap.SimpleEntry<>(classPath, message);
