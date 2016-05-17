@@ -4,30 +4,31 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
 
 public class Client {
 
-    public static void main(String[] zero) {
+    public static void main(String[] zero){
+
         Socket socket;
-        BufferedReader in;
-
         try {
-            socket = new Socket(InetAddress.getLocalHost(), 1111);
-            System.out.println("Connected !");
 
-            in = new BufferedReader (new InputStreamReader(socket.getInputStream()));
+            socket = new Socket("localhost",2009);
 
-            String message_distant;
-            if ((message_distant = in.readLine()) != null)
-                System.out.println(message_distant);
+            //Reception message
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String message = in.readLine();
+            System.out.println(message);
+
+            //envoie message
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            out.println("Calc&add&3,5");
+            out.flush();
 
             socket.close();
-        }catch (UnknownHostException e) {
-            e.printStackTrace();
-        }catch (IOException e) {
+
+        } catch (IOException e) {
+
             e.printStackTrace();
         }
     }
