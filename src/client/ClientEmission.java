@@ -1,6 +1,5 @@
 package client;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.AbstractMap;
@@ -14,7 +13,7 @@ import java.util.regex.Pattern;
 public class ClientEmission implements Runnable {
     private OutputStream outputStream;
     private PrintWriter out;
-    private Scanner scanner = null;
+    private Scanner scanner;
 
     public ClientEmission(OutputStream outputStream) {
         this.outputStream = outputStream;
@@ -23,7 +22,6 @@ public class ClientEmission implements Runnable {
 
     public void run() {
         scanner = new Scanner(System.in);
-
         display();
     }
 
@@ -35,7 +33,6 @@ public class ClientEmission implements Runnable {
 
         System.out.println(help);
 
-        Scanner scanner = new Scanner(System.in);
         String input = "";
         while (input != "q" || !scanner.hasNextLine()){
             input = scanner.nextLine();
@@ -96,7 +93,6 @@ public class ClientEmission implements Runnable {
     }
 
     public String getLine(String message){
-        Scanner scanner = new Scanner(System.in);
         System.out.println(message);
         while(!scanner.hasNextLine()){}
 
