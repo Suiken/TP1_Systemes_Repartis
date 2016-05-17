@@ -29,7 +29,7 @@ class ServerThread implements Runnable {
 //
 //                System.out.println("Le client numéro " + id + " est connecté !");
 //
-//                sendMessage("Votre ID est " + id, socket);
+//                sendOperation("Votre ID est " + id, socket);
 //
 //                // Reception message
 //                String message = receiveMessage(socket);
@@ -56,7 +56,7 @@ class ServerThread implements Runnable {
         }
     }
 
-//    void sendMessage(String message, Socket socket) throws Exception{
+//    void sendOperation(String message, Socket socket) throws Exception{
 //        PrintWriter out = new PrintWriter(socket.getOutputStream());
 //        out.println("Votre ID est " + id);
 //        out.flush();

@@ -6,8 +6,6 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,7 +30,7 @@ public class ClientEmission implements Runnable {
 
     public void display(){
         String help = "[DISPLAY]\n" +
-                "1 - Envoyer un message\n" +
+                "1 - Demander une opération\n" +
                 "h - Liste des commandes\n" +
                 "q - Quitter\n";
 
@@ -44,7 +42,7 @@ public class ClientEmission implements Runnable {
 
             switch (input){
                 case "1" :
-                    sendMessage();
+                    sendOperation();
                     System.out.println(help);
                     break;
                 case "h" :
@@ -53,15 +51,15 @@ public class ClientEmission implements Runnable {
                 case "q" :
                     return;
                 default :
-                    sendMessage();
+                    sendOperation();
                     break;
             }
         }
     }
 
-    public void sendMessage(){
+    public void sendOperation(){
         try {
-            String message = getLine("Saisir un message :");
+            String message = getLine("Saisir une opération :");
 
             AbstractMap.SimpleEntry<String, String> entry = translate(message);
             if (entry != null){
@@ -69,12 +67,13 @@ public class ClientEmission implements Runnable {
 
                 out.println(entry.getValue());
                 out.flush();
+                System.out.println("(envoyé)\n");
             }
             else {
-                out.println(message);
-                out.flush();
+                //out.println(message);
+                //out.flush();
+                System.out.println("'" + message + "' n'est pas une opération.\n");
             }
-            System.out.println("(envoyé)\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,18 +84,15 @@ public class ClientEmission implements Runnable {
         Matcher matcher = pattern.matcher(input);
         AbstractMap.SimpleEntry<String, String> entry;
 
-        if (!matcher.find())
+        if (!matcher.find() || (entry = translateIntoOperation(input)) == null)
             return null;
 
-        if ((entry = translateIntoOperation(input)) != null)
-            return entry;
-
-        return null;
+        return entry;
     }
 
     public AbstractMap.SimpleEntry<String, String> translateIntoOperation(String input){
         MathRegex operation = getOperation(input);
-        if (operation.equals(MathRegex.OPERATION) || operation == null)
+        if (operation.equals(MathRegex.OPERATION))
             return null;
 
         AbstractMap.SimpleEntry<Integer, Integer> values = getParameters(input, operation);
@@ -107,13 +103,6 @@ public class ClientEmission implements Runnable {
         return new AbstractMap.SimpleEntry<>(classPath, message);
     }
 
-    public String getLine(String message){
-        System.out.println(message);
-        while(!scanner.hasNextLine()){}
-
-        return scanner.nextLine();
-    }
-
     public MathRegex getOperation(String input){
         Matcher matcher;
         for (MathRegex op : MathRegex.values()){
@@ -122,7 +111,7 @@ public class ClientEmission implements Runnable {
                 return op;
             }
         }
-        return null;
+        return MathRegex.OPERATION;
     }
 
     public AbstractMap.SimpleEntry<Integer, Integer> getParameters(String input, MathRegex operation){
@@ -132,5 +121,12 @@ public class ClientEmission implements Runnable {
         int b = Integer.parseInt(parameters[1]);
 
         return new AbstractMap.SimpleEntry<>(a, b);
+    }
+
+    public String getLine(String message){
+        System.out.println(message);
+        while(!scanner.hasNextLine()){}
+
+        return scanner.nextLine();
     }
 }
