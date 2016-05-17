@@ -50,19 +50,20 @@ public class ClientEmission implements Runnable {
                     break;
                 case "q" :
                     return;
+                default :
+                    sendMessage();
+                    break;
             }
         }
     }
 
     public void sendMessage(){
         try {
-            ByteStream.toStream(outputStream, new File("/home/suiken/Bureau/Calc.class"));
             String message = getLine("Saisir un message :");
 
             AbstractMap.SimpleEntry<String, String> entry = translateIntoAddition(message);
             if (entry != null){
-                out.println(entry.getKey());
-                out.flush();
+                ByteStream.toStream(outputStream, new File(entry.getKey()));
 
                 out.println(entry.getValue());
                 out.flush();
@@ -88,7 +89,7 @@ public class ClientEmission implements Runnable {
             int a = Integer.parseInt(parameters[0]);
             int b = Integer.parseInt(parameters[1]);
 
-            String classPath = "Calc&add&" + a + "," + b;
+            String classPath = Calc.class.getResource("Calc.class").getPath();
             String message = "Calc&add&" + a + "," + b;
 
             return new AbstractMap.SimpleEntry<>(classPath, message);

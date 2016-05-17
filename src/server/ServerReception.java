@@ -14,8 +14,8 @@ import java.net.URLClassLoader;
  */
 public class ServerReception implements Runnable {
     private Socket socket;
-    private String message;
     private String name;
+    private String message;
     private PrintWriter out;
     private BufferedReader in;
 
@@ -34,37 +34,34 @@ public class ServerReception implements Runnable {
         while(true){
             try {
                 String result = translateMessage(socket);
+
                 System.out.println("Réponse à envoyer : " + result);
-                sendMessage("Réponse : " + result, socket);
+
+                out.println(result);
+                out.flush();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    void sendMessage(String message, Socket socket) throws Exception{
-        out = new PrintWriter(socket.getOutputStream());
-        out.println(message);
-        out.flush();
-    }
-
     File receiveFile(Socket socket) throws Exception{
-        File tmpFile = new File("Temp.class");
+        File tmpFile = new File("tmp.class");
         ByteStream.toFile(socket.getInputStream(), tmpFile);
         return tmpFile;
     }
 
     String translateMessage(Socket socket) throws Exception{
         File tmpFile = receiveFile(socket);
-        String message = in.readLine();
-        String messages[] = message.split("&");
-        renameFile(tmpFile, messages[0]);
-        Class<?> classFile = findClass(messages[0]);
-        return executeMethod(classFile, messages[1], messages[2].split(","));
+        message = in.readLine();
+        String arguments[] = message.split("&");
+        renameFile(tmpFile, arguments[0]);
+        Class<?> classFile = findClass(arguments[0]);
+        return executeMethod(classFile, arguments[1], arguments[2].split(","));
     }
 
-    File renameFile(File file, String newName){
-        File resultFile = new File(newName + ".class");
+    File renameFile(File file, String name){
+        File resultFile = new File(name + ".class");
         file.renameTo(resultFile);
         file.delete();
         return resultFile;
@@ -79,14 +76,13 @@ public class ServerReception implements Runnable {
 
     String executeMethod(Class<?> classOfFile, String methodName, String[] parameters) throws Exception{
         Constructor<?> constructorOfFile = classOfFile.getConstructor();
-        Object object = constructorOfFile.newInstance(new Object[] { });
+        Object object = constructorOfFile.newInstance();
 
         Method methods[] = classOfFile.getMethods();
         Object result = new Object();
         for(Method m : methods){
-            if(m.getName().equals(methodName)){
+            if(m.getName().equals(methodName))
                 result = m.invoke(object, parameters);
-            }
         }
         return result.toString();
     }
