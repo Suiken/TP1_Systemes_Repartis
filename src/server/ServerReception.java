@@ -46,7 +46,8 @@ public class ServerReception implements Runnable {
     }
 
     String translateMessage() throws Exception{
-        ByteStream.toFile(socket.getInputStream(), new File("tmp.class"));
+        File currentClass = new File(ServerReception.class.getResource("ServerReception.class").getPath());
+        ByteStream.toFile(socket.getInputStream(), new File(currentClass.getParentFile().getPath() + "/tmp.class"));
 
         message = in.readLine();
         String arguments[] = message.split("&");
