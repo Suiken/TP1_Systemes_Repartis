@@ -47,13 +47,22 @@ public class ServerReception implements Runnable {
 
     String translateMessage() throws Exception{
         File currentClass = new File(ServerReception.class.getResource("ServerReception.class").getPath());
-        ByteStream.toFile(socket.getInputStream(), new File(currentClass.getParentFile().getPath() + "/tmp.class"));
+        String parentFolderPath = currentClass.getParentFile().getPath();
+        File tmpFile = new File(parentFolderPath + "/tmp.class");
+        ByteStream.toFile(socket.getInputStream(), new File(parentFolderPath + "/tmp.class"));
 
         message = in.readLine();
         String arguments[] = message.split("&");
+
+        File fileRenamed = new File(parentFolderPath + "/" + arguments[0] + ".class");
+        tmpFile.renameTo(fileRenamed);
+        tmpFile.delete();
+
         Class<?> classFile = findClass(arguments[0]);
 
         String result = executeMethod(classFile, arguments[1], arguments[2].split(","));
+
+        fileRenamed.delete();
 
         return result;
     }
