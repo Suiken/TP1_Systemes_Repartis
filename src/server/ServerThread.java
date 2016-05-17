@@ -1,9 +1,8 @@
 package server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import common.ByteStream;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -30,9 +29,11 @@ class ServerThread implements Runnable {
                 out.flush();
 
                 // Reception message
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String message = in.readLine();
-                System.out.println("Message reçu : " + message);
+                InputStream socketInputStream = socket.getInputStream();
+                String message = ByteStream.toString(socketInputStream);
+                //BufferedReader in = new BufferedReader(new InputStreamReader(socketInputStream));
+                //String message = in.readLine();
+                System.out.println("Message recu " + message);
 
                 socket.close();
             }
