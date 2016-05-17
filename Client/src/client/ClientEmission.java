@@ -1,6 +1,8 @@
 package client;
 
 
+import client.common.ByteStream;
+
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintWriter;

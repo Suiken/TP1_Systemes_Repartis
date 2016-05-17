@@ -1,18 +1,20 @@
 package server;
 
+import server.common.ByteStream;
+
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
 
 /**
  * Created by Dimitri on 16/05/2016.
  */
 public class ServerReception implements Runnable {
     private Socket socket;
-    private String name;
     private String message;
     private PrintWriter out;
     private BufferedReader in;
@@ -20,7 +22,6 @@ public class ServerReception implements Runnable {
     public ServerReception(Socket socket, String name){
         try {
             this.socket = socket;
-            this.name = name;
             out = new PrintWriter(socket.getOutputStream());
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         }catch(Exception e){
@@ -48,21 +49,19 @@ public class ServerReception implements Runnable {
         String parentFolderPath = currentClass.getParentFile().getParentFile().getPath();
         File clientFolder = new File(parentFolderPath + "/client");
         clientFolder.mkdir();
-        File tmpFile = new File(clientFolder.getPath() + "/tmp.class");
+        File tmpFile = new File(clientFolder.getPath() + "/Calc.class");
         ByteStream.toFile(socket.getInputStream(), tmpFile);
 
         message = in.readLine();
         String arguments[] = message.split("&");
 
-        File fileRenamed = new File(clientFolder.getPath() + "/" + arguments[0] + ".class");
-        tmpFile.renameTo(fileRenamed);
-        tmpFile.delete();
+        Files.move(tmpFile.toPath(), tmpFile.toPath().resolveSibling("Calc.class"));
 
         Class<?> classFile = findClass(arguments[0]);
 
         String result = executeMethod(classFile, arguments[1], arguments[2].split(","));
 
-        fileRenamed.delete();
+        tmpFile.delete();
 
         return result;
     }
