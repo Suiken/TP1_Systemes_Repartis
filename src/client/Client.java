@@ -1,9 +1,8 @@
 package client;
 
-import common.ByteStream;
-
 import java.io.*;
 import java.net.*;
+import java.util.AbstractMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,11 +60,16 @@ public class Client {
     public static void sendMessage(){
         try {
             String message = getLine("Saisir un message :");
-
-            System.out.println(translateInput(message));
-
             PrintWriter out = new PrintWriter(socket.getOutputStream());
-            out.println(message);
+
+            AbstractMap.SimpleEntry<String, String> entry = translateIntoAddition(message);
+            if (entry != null){
+                out.println(entry.getKey());
+                out.println(entry.getValue());
+            }
+            else
+                out.println(message);
+
             out.flush();
 
             System.out.println("(envoyé)\n");
@@ -74,21 +78,23 @@ public class Client {
         }
     }
 
-    public static String translateInput(String input) {
+    public static AbstractMap.SimpleEntry<String, String> translateIntoAddition(String input) {
         Pattern pattern = Pattern.compile(MathRegex.ADDITION.toString());
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
             input = input.replaceAll("\\s+","");
-            System.out.println(input);
 
             String[] parameters = input.split("\\+");
             int a = Integer.parseInt(parameters[0]);
             int b = Integer.parseInt(parameters[1]);
 
-            return "Addition de : " + a + " + " + b;
+            String classPath = Calc.class.getResource("Calc.class").toString();
+            String message = "Calc&add&" + a + "," + b;
+
+            return new AbstractMap.SimpleEntry<>(classPath, message);
         }
-        return "Opération incorrecte.";
+        return null;
     }
 
     public static String getLine(String message){

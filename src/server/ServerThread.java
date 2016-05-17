@@ -10,7 +10,6 @@ import java.util.HashMap;
 class ServerThread implements Runnable {
 
     private ServerSocket socketServer;
-    private Socket socket;
     private HashMap<Socket, Integer> clientMap = new HashMap<>();
     private int id = 0;
 
@@ -21,7 +20,7 @@ class ServerThread implements Runnable {
     public void run() {
         try {
             while(true){
-                socket = socketServer.accept();
+                Socket socket = socketServer.accept();
                 clientMap.put(socket, id);
 
                 System.out.println("Le client numéro " + id + " est connecté !");
@@ -39,7 +38,7 @@ class ServerThread implements Runnable {
 
                 System.out.println("Message reçu de " + clientMap.get(socket) + " : " +message);
                 //System.out.println("Fichier recu : " + file);
-                
+
                 ++id;
 
                 socket.close();
