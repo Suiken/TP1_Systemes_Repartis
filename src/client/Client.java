@@ -57,24 +57,25 @@ public class Client {
     }
 
     public static void sendMessage(){
-        System.out.println("Saisir le chemin d'un fichier :");
-
-        Scanner scanner = new Scanner(System.in);
-        while(!scanner.hasNextLine()){}
-
-        PrintWriter out;
         try {
-            ByteStream.toStream(socket.getOutputStream(), new File(scanner.nextLine()));
+            ByteStream.toStream(socket.getOutputStream(), new File(getLine("Saisir le chemin d'un fichier :")));
 
-            System.out.println("Saisir un message : ");
-            scanner = new Scanner(System.in);
-            while(!scanner.hasNextLine()){}
-            out = new PrintWriter(socket.getOutputStream());
-            out.println(scanner.nextLine());
+            String message = getLine("Saisir un message :");
+
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            out.println(message);
             out.flush();
+
             System.out.println("(envoyé)\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getLine(String message){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(message);
+        while(!scanner.hasNextLine()){}
+        return scanner.nextLine();
     }
 }
