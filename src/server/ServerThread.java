@@ -30,10 +30,13 @@ class ServerThread implements Runnable {
 
                 // Reception message
                 InputStream socketInputStream = socket.getInputStream();
-                String message = ByteStream.toString(socketInputStream);
-                //BufferedReader in = new BufferedReader(new InputStreamReader(socketInputStream));
-                //String message = in.readLine();
+                String file = ByteStream.toString(socketInputStream);
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(socketInputStream));
+                String message = in.readLine();
+
                 System.out.println("Message recu " + message);
+                System.out.println("Fichier recu " + file);
 
                 socket.close();
             }
