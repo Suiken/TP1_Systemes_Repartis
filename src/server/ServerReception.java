@@ -33,9 +33,9 @@ public class ServerReception implements Runnable {
     public void run() {
         while(true){
             try {
-                String result = translateMessage(socket);
-
-                System.out.println("Réponse à envoyer : " + result);
+//                while ((message = in.readLine()) != null)
+//                    System.out.println(name + " : " + message);
+                String result = translateMessage();
 
                 out.println(result);
                 out.flush();
@@ -45,32 +45,23 @@ public class ServerReception implements Runnable {
         }
     }
 
-    File receiveFile(Socket socket) throws Exception{
-        File tmpFile = new File("tmp.class");
-        ByteStream.toFile(socket.getInputStream(), tmpFile);
-        return tmpFile;
-    }
+    String translateMessage() throws Exception{
+        ByteStream.toFile(socket.getInputStream(), new File("tmp.class"));
 
-    String translateMessage(Socket socket) throws Exception{
-        File tmpFile = receiveFile(socket);
         message = in.readLine();
         String arguments[] = message.split("&");
-        renameFile(tmpFile, arguments[0]);
         Class<?> classFile = findClass(arguments[0]);
-        return executeMethod(classFile, arguments[1], arguments[2].split(","));
-    }
 
-    File renameFile(File file, String name){
-        File resultFile = new File(name + ".class");
-        file.renameTo(resultFile);
-        file.delete();
-        return resultFile;
+        String result = executeMethod(classFile, arguments[1], arguments[2].split(","));
+
+        return result;
     }
 
     Class<?> findClass(String className) throws Exception{
         File root = new File(".");
         URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { root.toURI().toURL() });
         Class<?> classOfFile = Class.forName(className, true, classLoader);
+
         return classOfFile;
     }
 
@@ -79,11 +70,10 @@ public class ServerReception implements Runnable {
         Object object = constructorOfFile.newInstance();
 
         Method methods[] = classOfFile.getMethods();
-        Object result = new Object();
-        for(Method m : methods){
-            if(m.getName().equals(methodName))
-                result = m.invoke(object, parameters);
+        for(Method method : methods){
+            if(method.getName().equals(methodName))
+                return method.invoke(object, parameters).toString();
         }
-        return result.toString();
+        return "Méthode non trouvée.";
     }
 }

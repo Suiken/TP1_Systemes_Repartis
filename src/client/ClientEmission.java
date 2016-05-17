@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +36,7 @@ public class ClientEmission implements Runnable {
                 "h - Liste des commandes\n" +
                 "q - Quitter\n";
 
-        System.out.println(help);
+        System.out.println("\n" + help);
 
         String input = "";
         while (input != "q" || !scanner.hasNextLine()){
@@ -61,7 +63,7 @@ public class ClientEmission implements Runnable {
         try {
             String message = getLine("Saisir un message :");
 
-            AbstractMap.SimpleEntry<String, String> entry = translateIntoAddition(message);
+            AbstractMap.SimpleEntry<String, String> entry = translate(message);
             if (entry != null){
                 ByteStream.toStream(outputStream, new File(entry.getKey()));
 
@@ -78,23 +80,31 @@ public class ClientEmission implements Runnable {
         }
     }
 
-    public AbstractMap.SimpleEntry<String, String> translateIntoAddition(String input) {
-        Pattern pattern = Pattern.compile(MathRegex.ADDITION.toString());
+    public AbstractMap.SimpleEntry<String, String> translate(String input) {
+        Pattern pattern = Pattern.compile(MathRegex.OPERATION.toString());
         Matcher matcher = pattern.matcher(input);
+        AbstractMap.SimpleEntry<String, String> entry;
 
-        if (matcher.find()) {
-            input = input.replaceAll("\\s+","");
+        if (!matcher.find())
+            return null;
 
-            String[] parameters = input.split("\\+");
-            int a = Integer.parseInt(parameters[0]);
-            int b = Integer.parseInt(parameters[1]);
+        if ((entry = translateIntoOperation(input)) != null)
+            return entry;
 
-            String classPath = Calc.class.getResource("Calc.class").getPath();
-            String message = "Calc&add&" + a + "," + b;
-
-            return new AbstractMap.SimpleEntry<>(classPath, message);
-        }
         return null;
+    }
+
+    public AbstractMap.SimpleEntry<String, String> translateIntoOperation(String input){
+        MathRegex operation = getOperation(input);
+        if (operation.equals(MathRegex.OPERATION) || operation == null)
+            return null;
+
+        AbstractMap.SimpleEntry<Integer, Integer> values = getParameters(input, operation);
+
+        String classPath = Calc.class.getResource("Calc.class").getPath();
+        String message = "Calc&" + operation.getMethodName() + "&" + values.getKey() + "," + values.getValue();
+
+        return new AbstractMap.SimpleEntry<>(classPath, message);
     }
 
     public String getLine(String message){
@@ -102,5 +112,25 @@ public class ClientEmission implements Runnable {
         while(!scanner.hasNextLine()){}
 
         return scanner.nextLine();
+    }
+
+    public MathRegex getOperation(String input){
+        Matcher matcher;
+        for (MathRegex op : MathRegex.values()){
+            matcher = Pattern.compile(op.toString()).matcher(input);
+            if (matcher.find() && !op.equals(MathRegex.OPERATION)) {
+                return op;
+            }
+        }
+        return null;
+    }
+
+    public AbstractMap.SimpleEntry<Integer, Integer> getParameters(String input, MathRegex operation){
+        input = input.replaceAll("\\s+","");
+        String[] parameters = input.split(operation.getOperator());
+        int a = Integer.parseInt(parameters[0]);
+        int b = Integer.parseInt(parameters[1]);
+
+        return new AbstractMap.SimpleEntry<>(a, b);
     }
 }
