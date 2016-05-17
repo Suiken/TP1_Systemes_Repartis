@@ -1,6 +1,7 @@
 package client;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.AbstractMap;
 import java.util.Scanner;
@@ -11,12 +12,13 @@ import java.util.regex.Pattern;
  * Created by Dimitri on 16/05/2016.
  */
 public class ClientEmission implements Runnable {
+    private OutputStream outputStream;
     private PrintWriter out;
-    private String message;
     private Scanner scanner = null;
 
-    public ClientEmission(PrintWriter out) {
-        this.out = out;
+    public ClientEmission(OutputStream outputStream) {
+        this.outputStream = outputStream;
+        this.out = new PrintWriter(outputStream);
     }
 
     public void run() {
