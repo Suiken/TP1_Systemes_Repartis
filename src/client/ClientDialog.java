@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 /**
  * Created by Dimitri on 16/05/2016.
@@ -15,7 +14,6 @@ public class ClientDialog implements Runnable {
     private Socket socket;
     private PrintWriter out = null;
     private BufferedReader in = null;
-    private Scanner scanner;
     private Thread emissionThread, receptionThread;
 
     public ClientDialog(Socket socket){
