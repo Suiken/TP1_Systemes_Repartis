@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Client {
     private static Socket socket;
     private static String ADDRESS = "localhost";
-    private static int PORT = 1111;
+    private static int PORT = 2000;
 
     public static void main(String[] zero){
 
@@ -46,6 +46,7 @@ public class Client {
             switch (input){
                 case "1" :
                     sendMessage();
+                    System.out.println(help);
                     break;
                 case "h" :
                     System.out.println(help);
@@ -67,6 +68,7 @@ public class Client {
             out = new PrintWriter(socket.getOutputStream());
             out.println(scanner.nextLine());
             out.flush();
+            System.out.println("(envoyé)\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
