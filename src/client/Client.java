@@ -1,9 +1,8 @@
 package client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import common.ByteStream;
+
+import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
@@ -58,13 +57,18 @@ public class Client {
     }
 
     public static void sendMessage(){
-        System.out.println("Saisir un message :");
+        System.out.println("Saisir le chemin d'un fichier :");
 
         Scanner scanner = new Scanner(System.in);
         while(!scanner.hasNextLine()){}
 
         PrintWriter out;
         try {
+            ByteStream.toStream(socket.getOutputStream(), new File(scanner.nextLine()));
+
+            System.out.println("Saisir un message : ");
+            scanner = new Scanner(System.in);
+            while(!scanner.hasNextLine()){}
             out = new PrintWriter(socket.getOutputStream());
             out.println(scanner.nextLine());
             out.flush();
