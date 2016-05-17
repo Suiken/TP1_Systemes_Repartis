@@ -2,22 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="978f8b85-6787-4d3a-aaff-626975516f71" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tmp.class" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Temp.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/TP1_Systeme_Repartis/Calc.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Calc.class" afterPath="$PROJECT_DIR$/Calc.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TP1_Systeme_Repartis/client/Calc.class" afterPath="$PROJECT_DIR$/out/production/TP1_Systeme_Repartis/client/Calc.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TP1_Systeme_Repartis/client/ClientEmission.class" afterPath="$PROJECT_DIR$/out/production/TP1_Systeme_Repartis/client/ClientEmission.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TP1_Systeme_Repartis/client/MathRegex.class" afterPath="$PROJECT_DIR$/out/production/TP1_Systeme_Repartis/client/MathRegex.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TP1_Systeme_Repartis/server/ServerDialog.class" afterPath="$PROJECT_DIR$/out/production/TP1_Systeme_Repartis/server/ServerDialog.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TP1_Systeme_Repartis/server/ServerReception.class" afterPath="$PROJECT_DIR$/out/production/TP1_Systeme_Repartis/server/ServerReception.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client/Calc.java" afterPath="$PROJECT_DIR$/src/client/Calc.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client/ClientEmission.java" afterPath="$PROJECT_DIR$/src/client/ClientEmission.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client/MathRegex.java" afterPath="$PROJECT_DIR$/src/client/MathRegex.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ServerDialog.java" afterPath="$PROJECT_DIR$/src/server/ServerDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ServerReception.java" afterPath="$PROJECT_DIR$/src/server/ServerReception.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ServerThread.java" afterPath="$PROJECT_DIR$/src/server/ServerThread.java" />
     </list>
     <ignored path="TP1_Systeme_Repartis.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -65,8 +51,8 @@
       <file leaf-file-name="ServerReception.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/ServerReception.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.1687898">
-              <caret line="56" column="8" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="8" />
+            <state vertical-scroll-proportion="0.82802546">
+              <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -797,16 +783,16 @@
       <option name="number" value="Default" />
       <updated>1463467574725</updated>
       <workItem from="1463467576266" duration="1877000" />
-      <workItem from="1463496963354" duration="3376000" />
+      <workItem from="1463496963354" duration="3435000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17734000" />
+    <option name="totallyTimeSpent" value="17793000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1790" height="991" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32932165" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -818,7 +804,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26398212" sideWeight="0.44094038" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32932165" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30791286" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30791286" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Metrics" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1320,8 +1306,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ServerReception.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1687898">
-          <caret line="56" column="8" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.82802546">
+          <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
