@@ -9,9 +9,8 @@ public class Server {
 
     public static void main(String[] args){
         try {
-            socket = new ServerSocket(PORT);
-
-            Thread serverThread = new Thread(new ServerThread(socket));
+            socket = new ServerSocket(PORT, 5);
+            Thread serverThread = new Thread(new ServerConnection(socket));
             serverThread.start();
 
             System.out.println("Serveur en écoute sur le port " + PORT);
