@@ -50,7 +50,7 @@ public class ClientEmission implements Runnable {
                     System.out.println(help);
                     break;
                 case "q" :
-                    return;
+                    System.exit(0);
                 default :
                     sendOperation();
                     break;
@@ -76,7 +76,8 @@ public class ClientEmission implements Runnable {
                 System.out.println("'" + message + "' n'est pas une opération.\n");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Le serveur ne répond plus.");
+            System.exit(0);
         }
     }
 

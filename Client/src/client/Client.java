@@ -20,8 +20,8 @@ public class Client {
 
             thread = new Thread(new ClientConnection(socket));
             thread.start();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Connexion refusée.");
         }
     }
 }

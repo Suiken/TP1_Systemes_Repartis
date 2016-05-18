@@ -17,12 +17,13 @@ public class ClientReception implements Runnable {
     public void run() {
         while(true){
             try {
-                message = in.readLine();
-                System.out.println("SERVEUR : " + message);
-            } catch (IOException e) {
+                while ((message = in.readLine()) != null) {
+                    System.out.println("SERVEUR : " + message);
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
+                return;
             }
         }
     }
-
 }

@@ -18,10 +18,12 @@ public class ServerReception implements Runnable {
     private String message;
     private PrintWriter out;
     private BufferedReader in;
+    private String name = "";
 
     public ServerReception(Socket socket, String name){
         try {
             this.socket = socket;
+            this.name = name;
             out = new PrintWriter(socket.getOutputStream());
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         }catch(Exception e){
@@ -39,7 +41,8 @@ public class ServerReception implements Runnable {
                 out.println(result);
                 out.flush();
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("Déconnexion de " + name + ".");
+                return;
             }
         }
     }
@@ -56,6 +59,7 @@ public class ServerReception implements Runnable {
         String arguments[] = message.split("&");
 
         Files.move(tmpFile.toPath(), tmpFile.toPath().resolveSibling("Calc.class"));
+        //tmpFile.renameTo(fileRenamed);
 
         Class<?> classFile = findClass(arguments[0]);
 

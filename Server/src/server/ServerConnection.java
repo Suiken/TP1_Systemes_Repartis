@@ -24,7 +24,7 @@ public class ServerConnection implements Runnable{
                 thread = new Thread(new ServerAuthentification(socket));
                 thread.start();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Erreur serveur.");
         }
     }
