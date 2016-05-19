@@ -40,6 +40,7 @@ public class ServerReception implements Runnable {
 
                 out.println(result);
                 out.flush();
+                System.out.println("Envoi de '" + result + "' à " + name + ".");
             } catch (Exception e) {
                 System.err.println("Déconnexion de " + name + ".");
                 return;
@@ -52,14 +53,15 @@ public class ServerReception implements Runnable {
         String parentFolderPath = currentClass.getParentFile().getParentFile().getPath();
         File clientFolder = new File(parentFolderPath + "/client");
         clientFolder.mkdir();
-        File tmpFile = new File(clientFolder.getPath() + "/Calc.class");
+        File tmpFile = new File(clientFolder.getPath() + "/tmp.class");
         ByteStream.toFile(socket.getInputStream(), tmpFile);
 
         message = in.readLine();
         String arguments[] = message.split("&");
 
-        Files.move(tmpFile.toPath(), tmpFile.toPath().resolveSibling("Calc.class"));
-        //tmpFile.renameTo(fileRenamed);
+        //Files.move(tmpFile.toPath(), tmpFile.toPath().resolveSibling("Calc.class"));
+        File fileRenamed = new File(clientFolder, arguments[0] + ".class");
+        tmpFile.renameTo(fileRenamed);
 
         Class<?> classFile = findClass(arguments[0]);
 
